@@ -1,16 +1,25 @@
 <template>
 	<SignUpContainer>
-		<form>
+		<form @submit.prevent="loginUser">
 			<h1>Log In</h1>
-			<input type="email" name="email" placeholder="Email" required />
+			<input
+				type="email"
+				name="email"
+				placeholder="Email"
+				v-model="emailInput"
+				required
+			/>
 			<div class="password">
 				<input
 					:type="password"
 					name="password"
 					placeholder="Password"
+					v-model="passwordInput"
 					required
 				/>
-				<button @click="showPassword">{{ showPasswordText }}</button>
+				<button type="button" @click="showPassword">
+					{{ showPasswordText }}
+				</button>
 			</div>
 
 			<button type="submit" class="btn">Login</button>
@@ -24,12 +33,15 @@
 
 <script>
 import SignUpContainer from '@/components/SignUpContainer';
+import axios from 'axios';
 export default {
 	components: { SignUpContainer },
 	data() {
 		return {
 			password: 'password',
 			showPasswordText: 'SHOW',
+			emailInput: '',
+			passwordInput: '',
 		};
 	},
 	methods: {
@@ -40,6 +52,23 @@ export default {
 			this.showPasswordText === 'SHOW'
 				? (this.showPasswordText = 'HIDE')
 				: (this.showPasswordText = 'SHOW');
+		},
+		async loginUser() {
+			await axios
+				.post('http://localhost:9000/auth/login', {
+					email: this.emailInput,
+					password: this.passwordInput,
+				})
+				.then((res) => {
+					if (res.data.error) {
+						this.$router.push(`/signup`);
+					} else {
+						this.$router.push(`/home/${res.data._id}`);
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 		},
 	},
 };

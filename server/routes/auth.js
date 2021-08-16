@@ -19,18 +19,18 @@ router.post(
 		if (errors.isEmpty()) {
 			const checkUser = await User.findOne({ email: email });
 			if (checkUser) {
-				res.status(400).json({ error: 'User Already Exist' });
+				res.status(200).json({ error: 'User Already Exist' });
+			} else {
+				const hashedPassword = await bcrypt.hash(password, 10);
+				let user = new User({
+					name: name,
+					email: email,
+					password: hashedPassword,
+				});
+				user = await user.save();
+
+				res.json(user);
 			}
-
-			const hashedPassword = await bcrypt.hash(password, 10);
-			let user = new User({
-				name: name,
-				email: email,
-				password: hashedPassword,
-			});
-			user = await user.save();
-
-			res.send('authed');
 		} else {
 			res.status(400).json({ errors: errors.array() });
 		}
@@ -40,7 +40,7 @@ router.post(
 router.post('/login', async (req, res) => {
 	let user = await User.findOne({ email: req.body.email });
 	if (!user) {
-		res.status(400).json({ error: 'User not registered' });
+		res.status(200).json({ error: 'User not registered' });
 	} else {
 		const isPasswordMatched = await bcrypt.compare(
 			req.body.password,
@@ -49,7 +49,7 @@ router.post('/login', async (req, res) => {
 		if (!isPasswordMatched) {
 			res.status(400).json({ error: 'Invalid Credentials' });
 		} else {
-			res.json({ name: user.name, email: user.email });
+			res.json({ name: user.name, email: user.email, _id: user._id });
 		}
 	}
 });

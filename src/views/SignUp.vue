@@ -1,23 +1,38 @@
 <template>
 	<SignUpContainer>
-		<form>
+		<form @submit.prevent="sendDetails">
 			<h1>Sign Up</h1>
-			<input type="text" name="name" placeholder="Name" required />
-			<input type="email" name="email" placeholder="Email" required />
+			<input
+				type="text"
+				name="name"
+				placeholder="Name"
+				v-model="nameInput"
+				required
+			/>
+			<input
+				type="email"
+				name="email"
+				placeholder="Email"
+				v-model="emailInput"
+				required
+			/>
 			<div class="password">
 				<input
 					:type="password"
 					name="password"
 					placeholder="Password"
+					v-model="passwordInput"
 					required
 				/>
-				<button @click="showPassword">{{ showPasswordText }}</button>
+				<button type="button" @click="showPassword">
+					{{ showPasswordText }}
+				</button>
 			</div>
 
-			<button type="submit" class="btn">Login</button>
+			<button type="submit" class="btn">Sign Up</button>
 			<p>
 				ALready Have An Account?
-				<router-link to="/login" class="link">Log In</router-link>
+				<router-link to="/login" class="link">Login</router-link>
 			</p>
 		</form>
 	</SignUpContainer>
@@ -25,12 +40,16 @@
 
 <script>
 import SignUpContainer from '@/components/SignUpContainer';
+import axios from 'axios';
 export default {
 	components: { SignUpContainer },
 	data() {
 		return {
 			password: 'password',
 			showPasswordText: 'SHOW',
+			nameInput: '',
+			emailInput: '',
+			passwordInput: '',
 		};
 	},
 	methods: {
@@ -41,6 +60,24 @@ export default {
 			this.showPasswordText === 'SHOW'
 				? (this.showPasswordText = 'HIDE')
 				: (this.showPasswordText = 'SHOW');
+		},
+		async sendDetails() {
+			axios
+				.post('http://localhost:9000/auth/signup', {
+					name: this.nameInput,
+					email: this.emailInput,
+					password: this.passwordInput,
+				})
+				.then((res) => {
+					if (res.data.error) {
+						this.$router.push(`/login`);
+					} else {
+						this.$router.push(`/home/${res.data._id}`);
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 		},
 	},
 };

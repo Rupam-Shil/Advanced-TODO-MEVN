@@ -3,24 +3,62 @@
 		<img class="sitelogo" src="@/assets/logo.svg" alt="logo of the site" />
 	</div>
 	<div class="container">
-		<div class="add-task-section">
+		<div class="add-task-section" :class="{ active: addTaskActive }">
 			<div class="top-sec">
 				<h1>Add new task</h1>
-				<div class="close-btn"><i class="fas fa-arrow-up"></i></div>
+				<button class="close-btn" @click="addTaskActive = !addTaskActive">
+					<i class="fas fa-arrow-up"></i>
+				</button>
 			</div>
 
 			<input type="text" name="todo" />
 			<button class="updateBtn">Add task</button>
 		</div>
 
-		<div class="container-inner"></div>
+		<div class="container-inner">
+			<div class="top-sec">
+				<div class="left-col">
+					<h1><span>Hi</span> {{ userName }}</h1>
+					<span>Your Tasks...</span>
+				</div>
+				<div class="right-col">
+					<button
+						class="add-new-task"
+						@click="
+							addTaskActive === false ? (addTaskActive = !addTaskActive) : null
+						"
+					>
+						<img src="@/assets/plus.svg" alt="" /> <span>Add task</span>
+					</button>
+				</div>
+			</div>
+			<div class="task-container">
+				<EachTask class="toggle__color" />
+				<EachTask class="toggle__color" />
+				<EachTask class="toggle__color" />
+				<EachTask class="toggle__color" />
+				<EachTask class="toggle__color" />
+				<EachTask class="toggle__color" />
+				<EachTask class="toggle__color" />
+				<EachTask class="toggle__color" />
+				<EachTask class="toggle__color" />
+				<EachTask class="toggle__color" />
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
+import EachTask from '@/components/EachTask';
 export default {
-	name: 'Home',
-	components: {},
+	components: { EachTask },
+	data() {
+		return {
+			addTaskActive: false,
+			userName: 'Rupam Shil',
+			tasks: [],
+		};
+	},
 };
 </script>
 
@@ -69,11 +107,16 @@ body {
 		height: 40vh;
 		background: var(--white-color);
 		border-radius: 0 0 20px 20px;
-		box-shadow: 0px 4px 10px var(--secondary-color);
+		box-shadow: 0px 4px 5px var(--secondary-color);
 		padding: 1rem 1rem;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
+		margin-top: -30%;
+		transition: 0.3s;
+		&.active {
+			margin-top: 0;
+		}
 		.top-sec {
 			display: flex;
 			justify-content: space-between;
@@ -87,14 +130,14 @@ body {
 			.close-btn {
 				background: var(--secondary-color);
 				color: #fff;
-				display: inline-block;
-				width: 40px;
-				height: 40px;
 				display: flex;
 				justify-content: center;
 				align-items: center;
 				border-radius: 50%;
 				transition: 0.3s;
+				width: 40px;
+				height: 40px;
+				border: none;
 				&:hover {
 					background: var(--primary-color);
 				}
@@ -109,7 +152,7 @@ body {
 			color: var(--primary-color);
 			font-size: 1.2rem;
 		}
-		button {
+		button.updateBtn {
 			outline: none;
 			border: none;
 			background: var(--primary-color);
@@ -124,8 +167,66 @@ body {
 		}
 	}
 	&-inner {
+		margin-top: 9%;
 		width: 100%;
 		height: 100%;
+		display: flex;
+		flex-direction: column;
+		.top-sec {
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 0 0 10px 0;
+			border-bottom: 1px solid var(--white-color);
+
+			.left-col {
+				display: flex;
+				flex-direction: column;
+				gap: 0.5rem;
+				align-items: flex-start;
+				color: var(--white-color);
+				h1 {
+					font-weight: 600;
+					span {
+						font-size: 1.2rem;
+						font-weight: 400;
+					}
+				}
+			}
+			.right-col {
+				button {
+					background: var(--secondary-color);
+					color: var(--white-color);
+					outline: none;
+					border: none;
+					display: flex;
+					align-items: center;
+					gap: 0.5rem;
+					padding: 0.5rem 1rem;
+					border-radius: 5px;
+					&:hover img {
+						transform: rotate(90deg);
+					}
+					img {
+						width: 30px;
+						height: 30px;
+						transition: 0.3s;
+					}
+					span {
+						text-transform: uppercase;
+						font-weight: bold;
+					}
+				}
+			}
+		}
+		.task-container {
+			margin-top: 1.5rem;
+			width: 100%;
+			.toggle__color:nth-child(2n) {
+				background: var(--secondary-color) !important;
+			}
+		}
 	}
 }
 </style>

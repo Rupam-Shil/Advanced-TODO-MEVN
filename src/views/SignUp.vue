@@ -72,7 +72,13 @@ export default {
 					if (res.data.error) {
 						this.$router.push(`/login`);
 					} else {
-						this.$router.push(`/home/${res.data._id}`);
+						axios
+							.post('http://localhost:9000/todo', {
+								userId: res.data._id,
+							})
+							.then(() => {
+								this.$router.push(`/home/${res.data._id}`);
+							});
 					}
 				})
 				.catch((err) => {

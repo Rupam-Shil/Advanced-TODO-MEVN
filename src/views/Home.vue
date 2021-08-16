@@ -34,15 +34,6 @@
 			</div>
 			<div class="task-container">
 				<EachTask class="toggle__color" />
-				<EachTask class="toggle__color" />
-				<EachTask class="toggle__color" />
-				<EachTask class="toggle__color" />
-				<EachTask class="toggle__color" />
-				<EachTask class="toggle__color" />
-				<EachTask class="toggle__color" />
-				<EachTask class="toggle__color" />
-				<EachTask class="toggle__color" />
-				<EachTask class="toggle__color" />
 			</div>
 		</div>
 	</div>
@@ -58,6 +49,9 @@ export default {
 			userName: 'Rupam Shil',
 			tasks: [],
 		};
+	},
+	created() {
+		console.log(this.$route.params.id);
 	},
 };
 </script>

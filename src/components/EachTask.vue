@@ -3,7 +3,7 @@
 		<div class="task-left-side">
 			<input type="checkbox" name="taskDone" v-model="isChecked" />
 			<p>
-				Lorem ipsum dolor sit amet consectetur adipisicing elit.
+				{{ todo.value }}
 			</p>
 		</div>
 		<button><img src="@/assets/del.svg" alt="" /></button>
@@ -12,6 +12,7 @@
 
 <script>
 export default {
+	props: ['todo'],
 	data() {
 		return {
 			isChecked: false,

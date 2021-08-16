@@ -6,13 +6,19 @@
 		<div class="add-task-section" :class="{ active: addTaskActive }">
 			<div class="top-sec">
 				<h1>Add new task</h1>
-				<button class="close-btn" @click="addTaskActive = !addTaskActive">
+				<button
+					type="button"
+					class="close-btn"
+					@click="addTaskActive = !addTaskActive"
+				>
 					<i class="fas fa-arrow-up"></i>
 				</button>
 			</div>
 
-			<input type="text" name="todo" />
-			<button class="updateBtn">Add task</button>
+			<input type="text" name="todo" v-model="todoInput" />
+			<button class="updateBtn" type="submit" @click.prevent="addTodo">
+				Add task
+			</button>
 		</div>
 
 		<div class="container-inner">
@@ -33,13 +39,19 @@
 				</div>
 			</div>
 			<div class="task-container">
-				<EachTask class="toggle__color" />
+				<EachTask
+					class="toggle__color"
+					v-for="todo in todos"
+					:key="todo._id"
+					:todo="todo"
+				/>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+import axios from 'axios';
 import EachTask from '@/components/EachTask';
 export default {
 	components: { EachTask },
@@ -47,11 +59,45 @@ export default {
 		return {
 			addTaskActive: false,
 			userName: 'Rupam Shil',
-			tasks: [],
+			todoInput: '',
+			todos: [],
+			userId: '',
 		};
 	},
 	created() {
-		console.log(this.$route.params.id);
+		this.userId = this.$route.params.id;
+		this.getTodos();
+		this.getUserName();
+	},
+	methods: {
+		async addTodo() {
+			// console.log('clicked');
+			await axios
+				.put('http://localhost:9000/todo', {
+					userId: this.userId,
+					value: this.todoInput,
+					isChecked: false,
+				})
+				.then((res) => {
+					console.log(res.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+			this.todoInput = '';
+			this.getTodos();
+		},
+		async getTodos() {
+			const res = await axios.get(`http://localhost:9000/todo/${this.userId}`);
+			const data = res.data;
+			this.todos = data.todos;
+		},
+		async getUserName() {
+			const res = await axios.get(
+				`http://localhost:9000/auth/name/${this.userId}`
+			);
+			this.userName = res.data.name;
+		},
 	},
 };
 </script>

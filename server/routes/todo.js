@@ -7,6 +7,11 @@ router.post('/', async (req, res) => {
 	res.json(todo);
 });
 
+router.get('/:id', async (req, res) => {
+	let todo = await Todo.findOne({ userId: req.params.id });
+	res.json(todo);
+});
+
 router.put('/', async (req, res) => {
 	let todo = await Todo.findOne({ userId: req.body.userId });
 	await todo.todos.push({
@@ -14,6 +19,6 @@ router.put('/', async (req, res) => {
 		isChecked: req.body.isChecked,
 	});
 	todo = await todo.save();
-	res.send('done');
+	res.json(todo);
 });
 module.exports = router;

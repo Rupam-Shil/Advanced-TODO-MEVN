@@ -1,24 +1,26 @@
 # advancetodo
 
 ## Project setup
+
 ```
 npm install
 ```
 
 ### Compiles and hot-reloads for development
+
 ```
-npm run serve
+npm run dev
 ```
 
-### Compiles and minifies for production
+### To run backend use
+
 ```
-npm run build
+npm run backdev
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+### Dummy Pictures
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![](a.jpg)
+![](b.jpg)
+![](c.jpg)
+![](d.jpg)

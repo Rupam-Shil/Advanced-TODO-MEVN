@@ -21,4 +21,9 @@ router.put('/', async (req, res) => {
 	todo = await todo.save();
 	res.json(todo);
 });
+
+router.put('/todocheck', async (req, res) => {
+	const todo = await Todo.findById(req.body.id);
+	res.json(todo);
+});
 module.exports = router;

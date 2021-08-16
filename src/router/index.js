@@ -10,6 +10,10 @@ const routes = [
 		component: Home,
 	},
 	{
+		path: '/',
+		redirect: '/signup',
+	},
+	{
 		path: '/signup',
 		name: 'Signup',
 		component: SignUp,

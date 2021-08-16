@@ -11,12 +11,18 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
 	props: ['todo'],
 	data() {
 		return {
 			isChecked: false,
 		};
+	},
+	watch: {
+		isChecked() {
+			console.log(this.todo);
+		},
 	},
 };
 </script>
